@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>All Evidence</title>
+</head>
+<body>
+
+<h2>All Evidence</h2>
+<button onclick="loadData()">Load Evidence</button>
+
+<ul id="list"></ul>
+
+<script>
+    const BASE_URL = "http://localhost:8083";
+
+function loadData() {
+    fetch(`${BASE_URL}/evidence/all`)
+    .then(res => res.json())
+    .then(data => {
+        let list = document.getElementById("list");
+        list.innerHTML = "";
+
+        data.forEach(e => {
+            let item = document.createElement("li");
+
+            item.innerHTML = `
+                ID: ${e.evidenceId}
+                <button onclick="verify(${e.evidenceId})">Verify</button>
+            `;
+
+            list.appendChild(item);
+        });
+    });
+}
+
+function verify(id) {
+    fetch(`${BASE_URL}/evidence/verify/${id}`)
+    .then(res => res.text())
+    .then(data => alert(data));
+}
+</script>
+
+</body>
+</html>
